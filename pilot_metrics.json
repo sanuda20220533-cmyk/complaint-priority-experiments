@@ -1,0 +1,610 @@
+{
+  "config": {
+    "csv_path": "cfpb_labeled_3000.csv",
+    "dataset_source": "https://github.com/S-W-Leong/complaint-classification/blob/f59453b2624a060d01e97bb8025668aa505a0561/data/processed/cfpb_labeled_3000.csv",
+    "label_provenance": "Existing AI-generated High, Medium and Low annotations released by S-W Leong. High=1, Medium and Low=0. The labels are research proxies.",
+    "columns": [
+      "narrative",
+      "urgency_label",
+      "date_received"
+    ],
+    "label_map": {
+      "High": 1,
+      "Medium": 0,
+      "Low": 0
+    },
+    "train_through": "2025-12-29",
+    "validation_through": "2025-12-30",
+    "checkpoint": "sentence-transformers/all-MiniLM-L6-v2",
+    "epochs": 2,
+    "batch_size": 16,
+    "max_length": 128,
+    "checkpoint_id": "sentence-transformers/all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "transformer_name": "minilm",
+    "transformer_seeds": [
+      13,
+      31,
+      47
+    ],
+    "checkpoint_revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "training_device": "cpu"
+  },
+  "csv_sha256": "0e172b586d0febe638af85e864d07dc85455077f1b3410aed652d10e2e60ec22",
+  "audit": {
+    "input_rows": 3000,
+    "rows_with_conflicting_duplicates": 2,
+    "retained_rows": 2998
+  },
+  "splits": {
+    "train": {
+      "first_date": "2025-12-28",
+      "last_date": "2025-12-29",
+      "urgent": 306,
+      "non_urgent": 1475
+    },
+    "validation": {
+      "first_date": "2025-12-30",
+      "last_date": "2025-12-30",
+      "urgent": 135,
+      "non_urgent": 567
+    },
+    "test": {
+      "first_date": "2025-12-31",
+      "last_date": "2025-12-31",
+      "urgent": 120,
+      "non_urgent": 395
+    }
+  },
+  "random_review_expected_urgent_capture": {
+    "0.05": 0.04854368932038835,
+    "0.1": 0.09902912621359224,
+    "0.2": 0.2
+  },
+  "baseline_selected_on_validation": "tfidf_svm",
+  "majority_class_macro_f1": 0.4340659340659341,
+  "models": {
+    "tfidf_logistic": {
+      "macro_f1_at_half": 0.5307754606195586,
+      "average_precision": 0.644801323477045,
+      "brier_score": 0.14482297886622822,
+      "reliability_bins": [
+        {
+          "range_start": 0.0,
+          "count": 24,
+          "mean_predicted": 0.08827985161119221,
+          "actual_urgent_rate": 0.0
+        },
+        {
+          "range_start": 0.1,
+          "count": 251,
+          "mean_predicted": 0.15509201633808734,
+          "actual_urgent_rate": 0.07569721115537849
+        },
+        {
+          "range_start": 0.2,
+          "count": 163,
+          "mean_predicted": 0.23846694101263272,
+          "actual_urgent_rate": 0.3067484662576687
+        },
+        {
+          "range_start": 0.3,
+          "count": 45,
+          "mean_predicted": 0.3388345300191578,
+          "actual_urgent_rate": 0.5111111111111111
+        },
+        {
+          "range_start": 0.4,
+          "count": 20,
+          "mean_predicted": 0.4323545706495371,
+          "actual_urgent_rate": 0.8
+        },
+        {
+          "range_start": 0.5,
+          "count": 9,
+          "mean_predicted": 0.5353183781522464,
+          "actual_urgent_rate": 1.0
+        },
+        {
+          "range_start": 0.6,
+          "count": 3,
+          "mean_predicted": 0.642781006798591,
+          "actual_urgent_rate": 1.0
+        }
+      ],
+      "uncertainty_review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 22,
+          "urgent_capture": 0.18333333333333332,
+          "review_precision": 0.88
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 38,
+          "urgent_capture": 0.31666666666666665,
+          "review_precision": 0.7450980392156863
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 62,
+          "urgent_capture": 0.5166666666666667,
+          "review_precision": 0.6019417475728155
+        }
+      },
+      "review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 22,
+          "urgent_capture": 0.18333333333333332,
+          "review_precision": 0.88
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 38,
+          "urgent_capture": 0.31666666666666665,
+          "review_precision": 0.7450980392156863
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 62,
+          "urgent_capture": 0.5166666666666667,
+          "review_precision": 0.6019417475728155
+        }
+      },
+      "cpu_latency_ms": {
+        "p50": 0.234708,
+        "p95": 0.44502739999999985,
+        "requests": 100
+      }
+    },
+    "tfidf_svm": {
+      "macro_f1_at_half": 0.6661319966583125,
+      "average_precision": 0.670468003445821,
+      "brier_score": 0.12691302045225564,
+      "reliability_bins": [
+        {
+          "range_start": 0.0,
+          "count": 267,
+          "mean_predicted": 0.04525757984836324,
+          "actual_urgent_rate": 0.04868913857677903
+        },
+        {
+          "range_start": 0.1,
+          "count": 104,
+          "mean_predicted": 0.1418928312631031,
+          "actual_urgent_rate": 0.25
+        },
+        {
+          "range_start": 0.2,
+          "count": 49,
+          "mean_predicted": 0.24080279790512701,
+          "actual_urgent_rate": 0.3673469387755102
+        },
+        {
+          "range_start": 0.3,
+          "count": 21,
+          "mean_predicted": 0.3442198044780718,
+          "actual_urgent_rate": 0.5714285714285714
+        },
+        {
+          "range_start": 0.4,
+          "count": 19,
+          "mean_predicted": 0.4512750424363931,
+          "actual_urgent_rate": 0.631578947368421
+        },
+        {
+          "range_start": 0.5,
+          "count": 11,
+          "mean_predicted": 0.5498972175796433,
+          "actual_urgent_rate": 0.36363636363636365
+        },
+        {
+          "range_start": 0.6,
+          "count": 13,
+          "mean_predicted": 0.6497081751737835,
+          "actual_urgent_rate": 0.6923076923076923
+        },
+        {
+          "range_start": 0.7,
+          "count": 12,
+          "mean_predicted": 0.7336807117202672,
+          "actual_urgent_rate": 0.75
+        },
+        {
+          "range_start": 0.8,
+          "count": 9,
+          "mean_predicted": 0.8400323361257851,
+          "actual_urgent_rate": 0.7777777777777778
+        },
+        {
+          "range_start": 0.9,
+          "count": 10,
+          "mean_predicted": 0.9473468512630976,
+          "actual_urgent_rate": 1.0
+        }
+      ],
+      "uncertainty_review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 13,
+          "urgent_capture": 0.10833333333333334,
+          "review_precision": 0.52
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 28,
+          "urgent_capture": 0.23333333333333334,
+          "review_precision": 0.5490196078431373
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 54,
+          "urgent_capture": 0.45,
+          "review_precision": 0.5242718446601942
+        }
+      },
+      "review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 22,
+          "urgent_capture": 0.18333333333333332,
+          "review_precision": 0.88
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 38,
+          "urgent_capture": 0.31666666666666665,
+          "review_precision": 0.7450980392156863
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 66,
+          "urgent_capture": 0.55,
+          "review_precision": 0.6407766990291263
+        }
+      },
+      "cpu_latency_ms": {
+        "p50": 0.27068749999999997,
+        "p95": 0.5549521,
+        "requests": 100
+      }
+    },
+    "minilm_seed_13": {
+      "macro_f1_at_half": 0.7128226363008972,
+      "average_precision": 0.6011671637847661,
+      "brier_score": 0.13859549745380134,
+      "reliability_bins": [
+        {
+          "range_start": 0.0,
+          "count": 231,
+          "mean_predicted": 0.06846862702973648,
+          "actual_urgent_rate": 0.05194805194805195
+        },
+        {
+          "range_start": 0.1,
+          "count": 90,
+          "mean_predicted": 0.1391351381522912,
+          "actual_urgent_rate": 0.2222222222222222
+        },
+        {
+          "range_start": 0.2,
+          "count": 33,
+          "mean_predicted": 0.24880365978134839,
+          "actual_urgent_rate": 0.24242424242424243
+        },
+        {
+          "range_start": 0.3,
+          "count": 32,
+          "mean_predicted": 0.35893515435783474,
+          "actual_urgent_rate": 0.21875
+        },
+        {
+          "range_start": 0.4,
+          "count": 24,
+          "mean_predicted": 0.4470304448387244,
+          "actual_urgent_rate": 0.4583333333333333
+        },
+        {
+          "range_start": 0.5,
+          "count": 15,
+          "mean_predicted": 0.5461853094272241,
+          "actual_urgent_rate": 0.4666666666666667
+        },
+        {
+          "range_start": 0.6,
+          "count": 25,
+          "mean_predicted": 0.6576606367908275,
+          "actual_urgent_rate": 0.56
+        },
+        {
+          "range_start": 0.7,
+          "count": 46,
+          "mean_predicted": 0.7571426762817863,
+          "actual_urgent_rate": 0.5434782608695652
+        },
+        {
+          "range_start": 0.8,
+          "count": 19,
+          "mean_predicted": 0.8282186111312188,
+          "actual_urgent_rate": 0.8421052631578947
+        }
+      ],
+      "uncertainty_review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 9,
+          "urgent_capture": 0.075,
+          "review_precision": 0.36
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 23,
+          "urgent_capture": 0.19166666666666668,
+          "review_precision": 0.45098039215686275
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 43,
+          "urgent_capture": 0.35833333333333334,
+          "review_precision": 0.4174757281553398
+        }
+      },
+      "review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 20,
+          "urgent_capture": 0.16666666666666666,
+          "review_precision": 0.8
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 34,
+          "urgent_capture": 0.2833333333333333,
+          "review_precision": 0.6666666666666666
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 61,
+          "urgent_capture": 0.5083333333333333,
+          "review_precision": 0.5922330097087378
+        }
+      },
+      "cpu_latency_ms": {
+        "p50": 8.9997915,
+        "p95": 10.472212500000001,
+        "requests": 100
+      },
+      "temperature": 1.1540231489080575,
+      "capture_difference_vs_validation_selected_baseline": {
+        "weekly_blocks": 1,
+        "interval": null
+      }
+    },
+    "minilm_seed_31": {
+      "macro_f1_at_half": 0.6020983616027266,
+      "average_precision": 0.5718436397562157,
+      "brier_score": 0.15032498882130998,
+      "reliability_bins": [
+        {
+          "range_start": 0.0,
+          "count": 291,
+          "mean_predicted": 0.07616466474841081,
+          "actual_urgent_rate": 0.08934707903780069
+        },
+        {
+          "range_start": 0.1,
+          "count": 117,
+          "mean_predicted": 0.14251647705591908,
+          "actual_urgent_rate": 0.3162393162393162
+        },
+        {
+          "range_start": 0.2,
+          "count": 26,
+          "mean_predicted": 0.24199360415518972,
+          "actual_urgent_rate": 0.4230769230769231
+        },
+        {
+          "range_start": 0.3,
+          "count": 22,
+          "mean_predicted": 0.3439511856853727,
+          "actual_urgent_rate": 0.36363636363636365
+        },
+        {
+          "range_start": 0.4,
+          "count": 20,
+          "mean_predicted": 0.46529068134917984,
+          "actual_urgent_rate": 0.6
+        },
+        {
+          "range_start": 0.5,
+          "count": 20,
+          "mean_predicted": 0.5351190791216209,
+          "actual_urgent_rate": 0.55
+        },
+        {
+          "range_start": 0.6,
+          "count": 14,
+          "mean_predicted": 0.6671226189321363,
+          "actual_urgent_rate": 0.7142857142857143
+        },
+        {
+          "range_start": 0.7,
+          "count": 5,
+          "mean_predicted": 0.7074708113293646,
+          "actual_urgent_rate": 1.0
+        }
+      ],
+      "uncertainty_review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 13,
+          "urgent_capture": 0.10833333333333334,
+          "review_precision": 0.52
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 25,
+          "urgent_capture": 0.20833333333333334,
+          "review_precision": 0.49019607843137253
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 54,
+          "urgent_capture": 0.45,
+          "review_precision": 0.5242718446601942
+        }
+      },
+      "review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 19,
+          "urgent_capture": 0.15833333333333333,
+          "review_precision": 0.76
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 33,
+          "urgent_capture": 0.275,
+          "review_precision": 0.6470588235294118
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 54,
+          "urgent_capture": 0.45,
+          "review_precision": 0.5242718446601942
+        }
+      },
+      "cpu_latency_ms": {
+        "p50": 13.4381035,
+        "p95": 23.1723923,
+        "requests": 100
+      },
+      "temperature": 1.3194529215726527,
+      "capture_difference_vs_validation_selected_baseline": {
+        "weekly_blocks": 1,
+        "interval": null
+      }
+    },
+    "minilm_seed_47": {
+      "macro_f1_at_half": 0.6920887740948007,
+      "average_precision": 0.5873264336652494,
+      "brier_score": 0.1445791687309182,
+      "reliability_bins": [
+        {
+          "range_start": 0.0,
+          "count": 270,
+          "mean_predicted": 0.06796010232941904,
+          "actual_urgent_rate": 0.07777777777777778
+        },
+        {
+          "range_start": 0.1,
+          "count": 92,
+          "mean_predicted": 0.13465679715968007,
+          "actual_urgent_rate": 0.2608695652173913
+        },
+        {
+          "range_start": 0.2,
+          "count": 34,
+          "mean_predicted": 0.24366788136808037,
+          "actual_urgent_rate": 0.3235294117647059
+        },
+        {
+          "range_start": 0.3,
+          "count": 19,
+          "mean_predicted": 0.3469067187610016,
+          "actual_urgent_rate": 0.42105263157894735
+        },
+        {
+          "range_start": 0.4,
+          "count": 18,
+          "mean_predicted": 0.4529317015629963,
+          "actual_urgent_rate": 0.2777777777777778
+        },
+        {
+          "range_start": 0.5,
+          "count": 17,
+          "mean_predicted": 0.5495512004325183,
+          "actual_urgent_rate": 0.6470588235294118
+        },
+        {
+          "range_start": 0.6,
+          "count": 20,
+          "mean_predicted": 0.6592354380038941,
+          "actual_urgent_rate": 0.55
+        },
+        {
+          "range_start": 0.7,
+          "count": 37,
+          "mean_predicted": 0.7619041550900797,
+          "actual_urgent_rate": 0.5675675675675675
+        },
+        {
+          "range_start": 0.8,
+          "count": 8,
+          "mean_predicted": 0.8057460117729398,
+          "actual_urgent_rate": 1.0
+        }
+      ],
+      "uncertainty_review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 12,
+          "urgent_capture": 0.1,
+          "review_precision": 0.48
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 25,
+          "urgent_capture": 0.20833333333333334,
+          "review_precision": 0.49019607843137253
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 47,
+          "urgent_capture": 0.39166666666666666,
+          "review_precision": 0.4563106796116505
+        }
+      },
+      "review_by_capacity": {
+        "0.05": {
+          "reviewed": 25,
+          "urgent_caught": 20,
+          "urgent_capture": 0.16666666666666666,
+          "review_precision": 0.8
+        },
+        "0.1": {
+          "reviewed": 51,
+          "urgent_caught": 31,
+          "urgent_capture": 0.25833333333333336,
+          "review_precision": 0.6078431372549019
+        },
+        "0.2": {
+          "reviewed": 103,
+          "urgent_caught": 58,
+          "urgent_capture": 0.48333333333333334,
+          "review_precision": 0.5631067961165048
+        }
+      },
+      "cpu_latency_ms": {
+        "p50": 7.8723125,
+        "p95": 8.71646075,
+        "requests": 100
+      },
+      "temperature": 1.1782856350453612,
+      "capture_difference_vs_validation_selected_baseline": {
+        "weekly_blocks": 1,
+        "interval": null
+      }
+    }
+  },
+  "environment": {
+    "python": "3.14.1",
+    "architecture": "arm64",
+    "operating_system": "Darwin",
+    "sklearn": "1.8.0",
+    "scipy": "1.17.0",
+    "torch": "2.9.1",
+    "transformers": "4.57.6",
+    "training_device": "CPU"
+  }
+}

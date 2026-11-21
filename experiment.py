@@ -106,14 +106,22 @@ def lexical_models(train, validation):
     return models
 
 
-def fit_distilbert(train, validation, checkpoint, seed, epochs=2, batch_size=16, max_length=256):
+def fit_transformer(train, validation, checkpoint, seed, epochs=2, batch_size=16,
+                    max_length=256, revision=None, training_device=None):
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer, set_seed
 
     set_seed(seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-    model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2).to(device)
+    if training_device:
+        device = torch.device(training_device)
+    elif torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint, revision=revision)
+    model = AutoModelForSequenceClassification.from_pretrained(checkpoint, revision=revision, num_labels=2).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
     texts, labels = xy(train)
     order = np.random.default_rng(seed)
@@ -123,7 +131,8 @@ def fit_distilbert(train, validation, checkpoint, seed, epochs=2, batch_size=16,
                          return_tensors="pt").to(target)
 
     model.train()
-    for _ in range(epochs):
+    for epoch in range(epochs):
+        print(f"Training seed {seed}, epoch {epoch + 1}/{epochs} with {device}", flush=True)
         sequence = order.permutation(len(texts))
         for start in range(0, len(sequence), batch_size):
             received = sequence[start:start + batch_size]
@@ -132,6 +141,8 @@ def fit_distilbert(train, validation, checkpoint, seed, epochs=2, batch_size=16,
             optimizer.zero_grad(set_to_none=True)
             model(**batch, labels=expected).loss.backward()
             optimizer.step()
+            if start and start % (batch_size * 40) == 0:
+                print(f"Processed {start} of {len(texts)} training examples", flush=True)
 
     model.eval()
 
@@ -235,13 +246,16 @@ def run_experiment(config):
     predictions = {name: model(x_test) for name, model in lexical.items()}
     results = {name: measure(y_test, predictions[name], model, x_test, capacities)
                for name, model in lexical.items()}
-    for seed in config["distilbert_seeds"]:
-        predict, use_cpu, temperature = fit_distilbert(
-            train, validation, config["checkpoint"], seed, epochs=config["epochs"]
+    transformer_name = config.get("transformer_name", "distilbert")
+    for seed in config.get("transformer_seeds", config.get("distilbert_seeds", [])):
+        predict, use_cpu, temperature = fit_transformer(
+            train, validation, config["checkpoint"], seed, epochs=config["epochs"],
+            batch_size=config.get("batch_size", 16), max_length=config.get("max_length", 256),
+            revision=config.get("checkpoint_revision"), training_device=config.get("training_device")
         )
         scores = predict(x_test)
         use_cpu()
-        name = f"distilbert_seed_{seed}"
+        name = f"{transformer_name}_seed_{seed}"
         results[name] = measure(y_test, scores, predict, x_test, capacities)
         results[name]["temperature"] = temperature
         results[name]["capture_difference_vs_validation_selected_baseline"] = (

@@ -1,0 +1,30 @@
+{
+  "csv_path": "cfpb_labeled_3000.csv",
+  "dataset_source": "https://github.com/S-W-Leong/complaint-classification/blob/f59453b2624a060d01e97bb8025668aa505a0561/data/processed/cfpb_labeled_3000.csv",
+  "label_provenance": "Existing AI-generated High, Medium and Low annotations released by S-W Leong. High=1, Medium and Low=0. The labels are research proxies.",
+  "columns": [
+    "narrative",
+    "urgency_label",
+    "date_received"
+  ],
+  "label_map": {
+    "High": 1,
+    "Medium": 0,
+    "Low": 0
+  },
+  "train_through": "2025-12-29",
+  "validation_through": "2025-12-30",
+  "checkpoint": "sentence-transformers/all-MiniLM-L6-v2",
+  "epochs": 2,
+  "batch_size": 16,
+  "max_length": 128,
+  "checkpoint_id": "sentence-transformers/all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+  "transformer_name": "minilm",
+  "transformer_seeds": [
+    13,
+    31,
+    47
+  ],
+  "checkpoint_revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+  "training_device": "cpu"
+}
