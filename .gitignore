@@ -1,0 +1,10 @@
+.DS_Store
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+data/
+*.csv
+*.parquet
+*.xlsx
+config.json
+complaint_priority_results.json

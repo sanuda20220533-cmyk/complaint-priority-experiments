@@ -1,0 +1,12 @@
+{
+  "csv_path": "",
+  "dataset_source": "",
+  "label_provenance": "",
+  "columns": ["text", "priority", "intake_date"],
+  "label_map": {},
+  "train_through": "",
+  "validation_through": "",
+  "checkpoint": "distilbert/distilbert-base-uncased",
+  "distilbert_seeds": [13, 31, 47],
+  "epochs": 2
+}
